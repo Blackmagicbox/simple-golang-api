@@ -9,10 +9,11 @@ import (
 )
 
 func main() {
-    fmt.Printf("Server Running")
+    fmt.Printf("\nServer Running on port 8080!")
     router := mux.NewRouter().StrictSlash(true)
     router.HandleFunc("/", Index)
-    router.HandleFunc("/api", Posts)
+    router.HandleFunc("/api/posts", Posts)
+    router.HandleFunc("/api/posts/{postId}", ShowPost)
     log.Fatal(http.ListenAndServe(":8080", router))
 }
 
@@ -22,4 +23,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 func Posts(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "Home")
+}
+
+func ShowPost(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    postId := vars["postId"]
+    fmt.Fprintf(w, "Show post", postId)
 }
